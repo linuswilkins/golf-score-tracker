@@ -2,7 +2,7 @@
 @layer base {
     html {
         @apply text-platinum;
-        @apply bg-eerie_black
+        @apply bg-eerie_black;
     }
 }
 @tailwind components;

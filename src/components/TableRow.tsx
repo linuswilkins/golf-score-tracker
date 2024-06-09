@@ -1,4 +1,6 @@
+import { useState } from "react";
 import type Hole from "./Hole";
+import Button from "./elements/Button";
 
 interface TableRowProps {
   hole: Hole;
@@ -6,6 +8,7 @@ interface TableRowProps {
   strokeOnHole: number[];
   addStroke: (playerId: number, holeId: number) => void;
   removeStroke: (playerId: number, holeId: number) => void;
+  setHoleSelected: (selected: number) => void;
 }
 
 export default function TableRow({
@@ -14,26 +17,45 @@ export default function TableRow({
   strokeOnHole,
   addStroke,
   removeStroke,
+  setHoleSelected,
 }: TableRowProps) {
   return (
-    <tr>
-      <td>{hole.getHoleNumber()}</td>
+    <tr onClick={() => setHoleSelected(hole.getHoleNumber())}>
+      <td className="p-xs border-b border-r border-platinum text-center">
+        {hole.getHoleNumber()}
+      </td>
 
       {strokeOnHole?.map((stroke, index) => (
-        <td key={index}>
-          {stroke}
-          <button
-            onClick={() => {
-              addStroke(index, hole.getHoleNumber() - 1);
-            }}
-          >
-            +
-          </button>
-          <button onClick={() => removeStroke(index, hole.getHoleNumber() - 1)}>
-            -
-          </button>
+        <td className="py-sm px-md border border-platinum" key={index}>
+          <div className="text-center">{stroke}</div>
         </td>
       ))}
+
+      {/* <tr>
+        <td className="p-xs border-b border-r border-platinum text-center">
+          {hole.getHoleNumber()}
+        </td>
+      
+        {strokeOnHole?.map((stroke, index) => (
+          <td className="py-sm px-md border-b border-platinum" key={index}>
+            <div className="flex">
+              {stroke}
+              <Button
+                onClick={() => {
+                  addStroke(index, hole.getHoleNumber() - 1);
+                }}
+              >
+                +
+              </Button>
+              <Button
+                onClick={() => removeStroke(index, hole.getHoleNumber() - 1)}
+              >
+                -
+              </Button>
+            </div>
+          </td>
+        ))}
+      </tr> */}
     </tr>
   );
 }

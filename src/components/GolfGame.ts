@@ -103,12 +103,11 @@ export function golfGameReducer(
         const newStrokes = state.strokes;
         if (newStrokes[payload.holeId][payload.playerId] > 0) {
           newStrokes[payload.holeId][payload.playerId]--;
-
-          return {
-            ...state,
-            strokes: newStrokes,
-          };
         }
+        return {
+          ...state,
+          strokes: newStrokes,
+        };
       }
     case GolfGameActionKind.SET_SHORT_GAME:
       if (payload.shortGame !== undefined) {
