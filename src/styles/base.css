@@ -6,4 +6,25 @@
     }
 }
 @tailwind components;
+@layer components {
+    .custom-scrollbar::-webkit-scrollbar {
+        @apply w-sm;
+        @apply p-sm;
+     
+    }
+  
+    .custom-scrollbar::-webkit-scrollbar-track {
+        
+    }
+  
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        
+      @apply bg-eerie_black-400;
+      ;
+    }
+  
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        @apply bg-eerie_black-200;
+    }
+  }
 @tailwind utilities;

@@ -26,8 +26,11 @@ export default function TableRow({
       </td>
 
       {strokeOnHole?.map((stroke, index) => (
-        <td className="py-sm px-md border border-platinum" key={index}>
-          <div className="text-center">{stroke}</div>
+        <td
+          className="py-sm px-md border border-platinum text-center"
+          key={index}
+        >
+          {stroke}
         </td>
       ))}
 

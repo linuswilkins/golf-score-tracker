@@ -24,36 +24,56 @@ export default function HoleModal({
     console.log(strokeOnHole);
   }, []);
   return (
-    <div className="bg-eerie_black-400 rounded-t-xl absolute bottom-none h-fit w-full z-30 p-md">
-      <h1 className="text-xl text-center">Loch {hole.getHoleNumber()}</h1>
-      <div className="flex justify-center my-md">
+    <div className="bg-eerie_black rounded-t-xl absolute bottom-none h-fit w-full z-30 py-md">
+      <h1 className="text-2xl text-center">Loch {hole.getHoleNumber()}</h1>
+      <div className="flex justify-center mt-md overflow-auto custom-scrollbar">
         <table className="">
           <thead>
-            <tr>
-              {players.map((player) => (
-                <th className="p-sm border">{player.getName()}</th>
-              ))}
+            <tr className="">
+              {players.map((player, index) => {
+                let className = "p-sm bg-eerie_black-400 ";
+                if (index === 0) {
+                  className += " rounded-tl-xl";
+                }
+                if (index === players.length - 1) {
+                  className += " rounded-tr-xl";
+                }
+
+                return (
+                  <th className={className}>
+                    <p className="truncate overflow-hidden w-3xl">
+                      {player.getName()}
+                    </p>
+                  </th>
+                );
+              })}
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr className="">
               {players.map((_, index) => (
-                <td className="p-sm border">
-                  <button
-                    onClick={() => {
-                      addStroke(index, hole.getHoleNumber() - 1);
-                    }}
-                  >
-                    +
-                  </button>
-                  {strokeOnHole[index]}
-                  <button
-                    onClick={() =>
-                      removeStroke(index, hole.getHoleNumber() - 1)
-                    }
-                  >
-                    -
-                  </button>
+                <td className="p-sm border-eerie_black bg-eerie_black-400 pb-md">
+                  <div className="flex flex-col">
+                    <Button
+                      onClick={() => {
+                        addStroke(index, hole.getHoleNumber() - 1);
+                      }}
+                    >
+                      +
+                    </Button>
+                    <span className="text-center py-sm">
+                      {strokeOnHole[index]}
+                    </span>
+
+                    <Button
+                      styling="bg-vermilion"
+                      onClick={() =>
+                        removeStroke(index, hole.getHoleNumber() - 1)
+                      }
+                    >
+                      -
+                    </Button>
+                  </div>
                 </td>
               ))}
             </tr>

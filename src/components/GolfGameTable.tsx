@@ -57,6 +57,24 @@ export default function GolfGameTable({
                   setHoleSelected={setHoleSelected}
                 />
               ))}
+              <tr>
+                <td className="border-r p-xs border-t-2 text-center">
+                  Par: TODO
+                </td>
+                {golfGame.players.map((player) => {
+                  let sum: number = 0;
+
+                  golfGame.strokes.forEach((stroke) => {
+                    sum += stroke[player.getId()];
+                  });
+
+                  return (
+                    <td className="py-sm px-md border border-t-2 border-platinum text-center">
+                      {sum}
+                    </td>
+                  );
+                })}
+              </tr>
             </tbody>
           </table>
         </div>
