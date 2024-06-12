@@ -16,7 +16,9 @@ export enum GolfGameActionKind {
   ADD_STROKE,
   REMOVE_STROKE,
   SET_SHORT_GAME,
+  SET_PAR,
   START_GAME,
+  LOAD_GAME,
 }
 
 export interface GolfGameAction {
@@ -27,6 +29,8 @@ export interface GolfGameAction {
     playerId?: number;
     shortGame?: boolean;
     holeId?: number;
+    par?: number;
+    golfGame?: GolfGameState;
   };
 }
 
@@ -116,6 +120,14 @@ export function golfGameReducer(
           shortGame: payload.shortGame,
         };
       }
+
+    case GolfGameActionKind.SET_PAR:
+      if (payload.holeId !== undefined && payload.par !== undefined) {
+        const newHoles = state.holes;
+        newHoles[payload.holeId].setPar(payload.par);
+        return { ...state, holes: newHoles };
+      }
+
     case GolfGameActionKind.START_GAME:
       const newHoles: Hole[] = [];
       const newStrokes: number[][] = [];
@@ -136,6 +148,14 @@ export function golfGameReducer(
         holes: newHoles,
         strokes: newStrokes,
       };
+
+    case GolfGameActionKind.LOAD_GAME:
+      if (payload.golfGame !== undefined) {
+        return {
+          ...payload.golfGame,
+        };
+      }
+      console.log(payload.golfGame);
 
     default:
       console.log("Invalid action type");

@@ -7,12 +7,14 @@ export interface GolfGameProps {
   golfGame: GolfGameState;
   addStroke: (playerId: number, holeId: number) => void;
   removeStroke: (playerId: number, holeId: number) => void;
+  saveGame(): void;
 }
 
 export default function GolfGameTable({
   golfGame,
   addStroke,
   removeStroke,
+  saveGame,
 }: GolfGameProps) {
   console.log(golfGame);
 
@@ -29,6 +31,7 @@ export default function GolfGameTable({
             addStroke={addStroke}
             removeStroke={removeStroke}
             setHoleSelected={setHoleSelected}
+            saveGame={saveGame}
           />
         </div>
       )}

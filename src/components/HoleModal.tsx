@@ -10,6 +10,7 @@ export interface HoleModalProps {
   addStroke: (playerId: number, holeId: number) => void;
   removeStroke: (playerId: number, holeId: number) => void;
   setHoleSelected: (selected: number) => void;
+  saveGame(): void;
 }
 
 export default function HoleModal({
@@ -19,6 +20,7 @@ export default function HoleModal({
   addStroke,
   removeStroke,
   setHoleSelected,
+  saveGame,
 }: HoleModalProps) {
   useEffect(() => {
     console.log(strokeOnHole);
@@ -82,7 +84,10 @@ export default function HoleModal({
       </div>
       <div className="-mb-md -mx-md">
         <button
-          onClick={() => setHoleSelected(0)}
+          onClick={() => {
+            setHoleSelected(0);
+            saveGame();
+          }}
           className="bg-asparagus  p-md w-full rounded-t-xl"
         >
           Schließen
