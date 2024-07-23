@@ -34,6 +34,11 @@ export interface GolfGameAction {
   };
 }
 
+export interface GolfGameArchive {
+  date: Date;
+  game: GolfGameState;
+}
+
 function cleanUpPlayerIds(players: Player[]): Player[] {
   const newPlayers = players.map((player, index) => {
     player.setId(index);

@@ -5,10 +5,12 @@ import {
   type GolfGameState,
   golfGameReducer,
   GolfGameActionKind,
+  type GolfGameArchive,
 } from "./GolfGame";
 import GolfGameTable from "./GolfGameTable";
 import Button from "./elements/Button";
 import Player from "./Player";
+import GolfGameList from "./GolfGameList";
 
 function GolfScoreTracker() {
   const [golfGame, dispatch] = useReducer(golfGameReducer, {
@@ -19,6 +21,7 @@ function GolfScoreTracker() {
     shortGame: false,
   });
   const [setup, setSetup] = useState(true);
+  const [archivedGames, setArchivedGames] = useState<GolfGameArchive[]>([]);
 
   function startGame() {
     if (golfGame.players.length < 1) {
@@ -31,6 +34,24 @@ function GolfScoreTracker() {
     setSetup(false);
   }
 
+  function parseGame(game: GolfGameState) {
+    try {
+      const players = game.players.map(
+        (player: any) => new Player(player.id, player.name)
+      );
+      const holes = game.holes.map(
+        (hole: any) => new Hole(hole.holeNumber, hole.par)
+      );
+      const strokes = game.strokes;
+      const playerAmount = game.playerAmount;
+      const shortGame = game.shortGame;
+
+      return { players, holes, strokes, playerAmount, shortGame };
+    } catch (e) {
+      alert("Error loading game");
+    }
+  }
+
   function restoreGame() {
     const safeGameString = localStorage.getItem("currentGolfGame");
 
@@ -41,28 +62,16 @@ function GolfScoreTracker() {
 
     const parsedSafeGame = JSON.parse(safeGameString);
 
-    try {
-      const players = parsedSafeGame.players.map(
-        (player: any) => new Player(player.id, player.name)
-      );
-      const holes = parsedSafeGame.holes.map(
-        (hole: any) => new Hole(hole.holeNumber, hole.par)
-      );
-      const strokes = parsedSafeGame.strokes;
-      const playerAmount = parsedSafeGame.playerAmount;
-      const shortGame = parsedSafeGame.shortGame;
+    const golfGame = parseGame(parsedSafeGame);
 
-      dispatch({
-        type: GolfGameActionKind.LOAD_GAME,
-        payload: {
-          golfGame: { players, holes, strokes, playerAmount, shortGame },
-        },
-      });
+    dispatch({
+      type: GolfGameActionKind.LOAD_GAME,
+      payload: {
+        golfGame: golfGame,
+      },
+    });
 
-      setSetup(false);
-    } catch (e) {
-      alert("Error loading game");
-    }
+    setSetup(false);
   }
 
   function saveGame() {
@@ -91,6 +100,25 @@ function GolfScoreTracker() {
     }
 
     setSetup(true);
+  }
+
+  function loadArchive() {
+    const archiveString = localStorage.getItem("golfGameArchive");
+
+    if (!archiveString) {
+      alert("No games in archive");
+      return;
+    }
+
+    const archive = JSON.parse(archiveString).map(
+      (archive: GolfGameArchive) => {
+        return { date: archive.date, game: parseGame(archive.game) };
+      }
+    );
+
+    setArchivedGames(archive);
+
+    console.log(archive);
   }
 
   return (
@@ -128,6 +156,9 @@ function GolfScoreTracker() {
             start={() => startGame()}
           />
           <Button onClick={restoreGame}>Letztes Spiel Laden</Button>
+
+          <Button onClick={loadArchive}>Alle Spiele</Button>
+          <GolfGameList archives={archivedGames} />
         </>
       )}
       {!setup && (
